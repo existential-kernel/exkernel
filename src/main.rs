@@ -76,6 +76,24 @@ enum Commands {
         source: Option<String>,
     },
 
+    /// Create a new ontology node from template
+    New {
+        /// Term name (lowercase, hyphens for multi-word, e.g. "domain-model")
+        term: String,
+
+        /// Add to ring N in exkernel.toml (0, 1, 2)
+        #[arg(long)]
+        ring: Option<u32>,
+
+        /// Don't open in $EDITOR after creating
+        #[arg(long)]
+        no_edit: bool,
+
+        /// Pre-fill the ontology section's first line
+        #[arg(long)]
+        description: Option<String>,
+    },
+
     /// Generate shell completion scripts
     Completions {
         /// Shell to generate completions for (bash, zsh, fish, elvish, powershell)
@@ -125,6 +143,15 @@ fn main() {
         Commands::Graph { ring, ref format } => {
             let ontology_dir = resolve_or_exit(cli.ontology.as_deref());
             commands::graph::run(&ontology_dir, ring, format)
+        }
+        Commands::New {
+            ref term,
+            ring,
+            no_edit,
+            ref description,
+        } => {
+            let ontology_dir = resolve_or_exit(cli.ontology.as_deref());
+            commands::new::run(&ontology_dir, term, ring, no_edit, description.as_deref())
         }
         Commands::Fetch { ref source } => {
             let ontology_dir = config::resolve_ontology_dir(cli.ontology.as_deref())
