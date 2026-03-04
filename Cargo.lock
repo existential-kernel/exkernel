@@ -151,8 +151,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "exkernel"
-version = "0.2.1"
+name = "existence"
+version = "0.3.0"
 dependencies = [
  "clap",
  "clap_complete",

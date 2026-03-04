@@ -5,25 +5,25 @@ use std::process::Command;
 /// Clone or pull an ontology from a GitHub repo.
 ///
 /// Source format: `github:org/repo`
-/// Stores in `~/.exkernel/sources/{org}/{repo}/`
+/// Stores in `~/.existence/sources/{org}/{repo}/`
 ///
-/// If no source given, reads from `exkernel.toml` `[sources]` section.
+/// If no source given, reads from `existence.toml` `[sources]` section.
 pub fn run(ontology_dir: &Path, source: Option<&str>) -> Result<(), String> {
     let sources = match source {
         Some(s) => vec![("cli".to_string(), s.to_string())],
         None => {
-            let config_path = ontology_dir.join("exkernel.toml");
+            let config_path = ontology_dir.join("existence.toml");
             if config_path.exists() {
                 let config = Config::load(&config_path)?;
                 if config.sources.is_empty() {
                     return Err(
-                        "No source specified and no [sources] section in exkernel.toml".to_string(),
+                        "No source specified and no [sources] section in existence.toml".to_string(),
                     );
                 }
                 config.sources.into_iter().collect()
             } else {
                 return Err(
-                    "No source specified and no exkernel.toml found. Usage: exkernel fetch github:org/repo"
+                    "No source specified and no existence.toml found. Usage: existence fetch github:org/repo"
                         .to_string(),
                 );
             }
@@ -43,7 +43,7 @@ fn fetch_source(name: &str, source: &str) -> Result<(), String> {
 
     let home = config::home_dir()?;
     let dest = home
-        .join(".exkernel")
+        .join(".existence")
         .join("sources")
         .join(&org)
         .join(&repo);

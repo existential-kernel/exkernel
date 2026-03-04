@@ -23,11 +23,11 @@ pub fn run(ontology_dir: &Path, ring: Option<u32>, format: &str) -> Result<(), S
 
     // If a ring filter is specified, load config and get ring terms
     let ring_filter: Option<Vec<String>> = if let Some(level) = ring {
-        let config_path = ontology_dir.join("exkernel.toml");
+        let config_path = ontology_dir.join("existence.toml");
         let config = Config::load(&config_path)?;
         let r = config
             .get_ring(level)
-            .ok_or(format!("Ring {level} not defined in exkernel.toml"))?;
+            .ok_or(format!("Ring {level} not defined in existence.toml"))?;
         Some(r.terms.clone())
     } else {
         None

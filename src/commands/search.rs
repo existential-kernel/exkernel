@@ -173,9 +173,9 @@ fn extract_definition(content: &str) -> String {
     "(no definition)".to_string()
 }
 
-/// Build a term -> ring level map from exkernel.toml.
+/// Build a term -> ring level map from existence.toml.
 fn load_ring_map(ontology_dir: &Path) -> Option<std::collections::HashMap<String, u32>> {
-    let config_path = ontology_dir.join("exkernel.toml");
+    let config_path = ontology_dir.join("existence.toml");
     let config = Config::load(&config_path).ok()?;
     let mut map = std::collections::HashMap::new();
     for (level, ring) in config.rings_sorted() {
@@ -195,9 +195,9 @@ mod tests {
         let src = tmp.join("src");
         fs::create_dir_all(&src).unwrap();
 
-        // exkernel.toml
+        // existence.toml
         fs::write(
-            tmp.join("exkernel.toml"),
+            tmp.join("existence.toml"),
             r#"[meta]
 name = "test"
 description = "test ontology"

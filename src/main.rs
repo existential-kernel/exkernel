@@ -9,9 +9,9 @@ use std::process;
 
 #[derive(Parser)]
 #[command(
-    name = "exkernel",
+    name = "existence",
     version,
-    about = "CLI for the Existential Kernel ontology framework"
+    about = "CLI for the Existence ontology framework"
 )]
 pub struct Cli {
     /// Path to the ontology directory (overrides auto-detection)
@@ -72,7 +72,7 @@ enum Commands {
 
     /// Clone or pull an ontology from a GitHub repo
     Fetch {
-        /// Source in format github:org/repo. If omitted, reads exkernel.toml
+        /// Source in format github:org/repo. If omitted, reads existence.toml
         source: Option<String>,
     },
 
@@ -81,7 +81,7 @@ enum Commands {
         /// Term name (lowercase, hyphens for multi-word, e.g. "domain-model")
         term: String,
 
-        /// Add to ring N in exkernel.toml (0, 1, 2)
+        /// Add to ring N in existence.toml (0, 1, 2)
         #[arg(long)]
         ring: Option<u32>,
 
@@ -163,22 +163,22 @@ fn main() {
             Ok(())
         }
         Commands::Install => {
-            println!("exkernel install: not yet implemented");
+            println!("existence install: not yet implemented");
             println!("Will set up ~/.claude integration with ontology terms.");
             Ok(())
         }
         Commands::Serve => {
-            println!("exkernel serve: not yet implemented");
+            println!("existence serve: not yet implemented");
             println!("Will start a local API server for ontology queries.");
             Ok(())
         }
         Commands::BuildSite => {
-            println!("exkernel build-site: not yet implemented");
+            println!("existence build-site: not yet implemented");
             println!("Will generate a static site + JSON API from the ontology.");
             Ok(())
         }
         Commands::Context { ref domain } => {
-            println!("exkernel context: not yet implemented");
+            println!("existence context: not yet implemented");
             println!("Will suggest relevant ontology terms for the '{domain}' domain.");
             Ok(())
         }

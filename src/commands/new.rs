@@ -4,7 +4,7 @@ use std::path::Path;
 /// Create a new ontology node from the SPEC.md template.
 ///
 /// Generates `src/<term>.md` with pre-filled sections.
-/// Optionally adds the term to a ring in `exkernel.toml` and opens `$EDITOR`.
+/// Optionally adds the term to a ring in `existence.toml` and opens `$EDITOR`.
 pub fn run(
     ontology_dir: &Path,
     term: &str,
@@ -49,7 +49,7 @@ pub fn run(
     std::fs::write(&file_path, &content)
         .map_err(|e| format!("Failed to write {}: {e}", file_path.display()))?;
 
-    // Optionally add to ring in exkernel.toml
+    // Optionally add to ring in existence.toml
     if let Some(ring_level) = ring {
         add_term_to_ring(ontology_dir, term, ring_level)?;
     }
@@ -89,16 +89,16 @@ fn titlecase(term: &str) -> String {
         .join(" ")
 }
 
-/// Add a term to the specified ring in exkernel.toml.
+/// Add a term to the specified ring in existence.toml.
 ///
 /// Reads the TOML, modifies the ring's terms array, and writes back.
 /// Uses string manipulation to preserve formatting since `toml` crate
 /// serialization may reorder keys.
 fn add_term_to_ring(ontology_dir: &Path, term: &str, ring_level: u32) -> Result<(), String> {
-    let config_path = ontology_dir.join("exkernel.toml");
+    let config_path = ontology_dir.join("existence.toml");
     if !config_path.exists() {
         return Err(format!(
-            "exkernel.toml not found at {}. Cannot add term to ring.",
+            "existence.toml not found at {}. Cannot add term to ring.",
             config_path.display()
         ));
     }
@@ -106,7 +106,7 @@ fn add_term_to_ring(ontology_dir: &Path, term: &str, ring_level: u32) -> Result<
     // Validate the ring exists
     let config = Config::load(&config_path)?;
     if config.get_ring(ring_level).is_none() {
-        return Err(format!("Ring {ring_level} not defined in exkernel.toml"));
+        return Err(format!("Ring {ring_level} not defined in existence.toml"));
     }
 
     // Check if term is already in the ring
@@ -126,7 +126,7 @@ fn add_term_to_ring(ontology_dir: &Path, term: &str, ring_level: u32) -> Result<
     std::fs::write(&config_path, &updated)
         .map_err(|e| format!("Failed to write {}: {e}", config_path.display()))?;
 
-    println!("Added '{term}' to ring {ring_level} in exkernel.toml");
+    println!("Added '{term}' to ring {ring_level} in existence.toml");
     Ok(())
 }
 
@@ -191,7 +191,7 @@ fn insert_term_in_toml(raw: &str, ring_level: u32, term: &str) -> Result<String,
 
     if !term_inserted {
         return Err(format!(
-            "Could not find terms array for ring {ring_level} in exkernel.toml"
+            "Could not find terms array for ring {ring_level} in existence.toml"
         ));
     }
 
@@ -213,7 +213,7 @@ mod tests {
         fs::create_dir_all(&src).unwrap();
 
         fs::write(
-            tmp.join("exkernel.toml"),
+            tmp.join("existence.toml"),
             r#"[meta]
 name = "test"
 description = "test ontology"
@@ -320,8 +320,8 @@ terms = ["state"]
         let result = run(tmp.path(), "focus", Some(0), true, None);
         assert!(result.is_ok(), "Expected Ok, got: {result:?}");
 
-        // Verify the term was added to exkernel.toml
-        let config = Config::load(&tmp.path().join("exkernel.toml")).unwrap();
+        // Verify the term was added to existence.toml
+        let config = Config::load(&tmp.path().join("existence.toml")).unwrap();
         let ring0 = config.get_ring(0).unwrap();
         assert!(
             ring0.terms.contains(&"focus".to_string()),
@@ -405,9 +405,9 @@ terms = []
     #[test]
     fn test_creates_src_dir_if_missing() {
         let tmp = tempfile::tempdir().unwrap();
-        // Only create exkernel.toml, no src dir
+        // Only create existence.toml, no src dir
         fs::write(
-            tmp.path().join("exkernel.toml"),
+            tmp.path().join("existence.toml"),
             "[meta]\nname = \"t\"\ndescription = \"t\"\n\n[rings.0]\nname = \"k\"\ndescription = \"c\"\nterms = []\n",
         )
         .unwrap();

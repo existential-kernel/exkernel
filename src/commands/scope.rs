@@ -3,7 +3,7 @@ use std::path::Path;
 
 /// List terms at a given ring level, or all rings if no level specified.
 pub fn run(ontology_dir: &Path, ring: Option<u32>) -> Result<(), String> {
-    let config_path = ontology_dir.join("exkernel.toml");
+    let config_path = ontology_dir.join("existence.toml");
     let config = Config::load(&config_path)?;
 
     match ring {
@@ -15,7 +15,7 @@ pub fn run(ontology_dir: &Path, ring: Option<u32>) -> Result<(), String> {
                     println!("  {term}");
                 }
             } else {
-                return Err(format!("Ring {level} not defined in exkernel.toml"));
+                return Err(format!("Ring {level} not defined in existence.toml"));
             }
         }
         None => {

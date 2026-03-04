@@ -55,13 +55,13 @@ impl Config {
 ///
 /// Priority:
 /// 1. `--ontology <path>` flag (passed as `explicit`)
-/// 2. Current directory if it contains `exkernel.toml`
-/// 3. `~/.exkernel/sources/<first-source>/`
+/// 2. Current directory if it contains `existence.toml`
+/// 3. `~/.existence/sources/<first-source>/`
 pub fn resolve_ontology_dir(explicit: Option<&Path>) -> Result<PathBuf, String> {
     // 1. Explicit flag
     if let Some(p) = explicit {
         let p = p.to_path_buf();
-        if p.join("exkernel.toml").exists() || p.join("src").is_dir() {
+        if p.join("existence.toml").exists() || p.join("src").is_dir() {
             return Ok(p);
         }
         return Err(format!(
@@ -72,15 +72,15 @@ pub fn resolve_ontology_dir(explicit: Option<&Path>) -> Result<PathBuf, String> 
 
     // 2. Current directory
     let cwd = std::env::current_dir().map_err(|e| format!("Cannot get cwd: {e}"))?;
-    if cwd.join("exkernel.toml").exists() {
+    if cwd.join("existence.toml").exists() {
         return Ok(cwd);
     }
 
-    // 3. First source in ~/.exkernel/sources/
+    // 3. First source in ~/.existence/sources/
     let home = home_dir()?;
-    let sources_dir = home.join(".exkernel").join("sources");
+    let sources_dir = home.join(".existence").join("sources");
     if sources_dir.is_dir() {
-        // Look for any directory that contains exkernel.toml or src/
+        // Look for any directory that contains existence.toml or src/
         if let Ok(entries) = std::fs::read_dir(&sources_dir) {
             for entry in entries.flatten() {
                 let p = entry.path();
@@ -90,14 +90,14 @@ pub fn resolve_ontology_dir(explicit: Option<&Path>) -> Result<PathBuf, String> 
                         for inner_entry in inner.flatten() {
                             let ip = inner_entry.path();
                             if ip.is_dir()
-                                && (ip.join("exkernel.toml").exists() || ip.join("src").is_dir())
+                                && (ip.join("existence.toml").exists() || ip.join("src").is_dir())
                             {
                                 return Ok(ip);
                             }
                         }
                     }
                     // Or direct repo
-                    if p.join("exkernel.toml").exists() || p.join("src").is_dir() {
+                    if p.join("existence.toml").exists() || p.join("src").is_dir() {
                         return Ok(p);
                     }
                 }
@@ -106,7 +106,7 @@ pub fn resolve_ontology_dir(explicit: Option<&Path>) -> Result<PathBuf, String> 
     }
 
     Err(
-        "Cannot find ontology directory. Use --ontology <path>, cd into an ontology, or run `exkernel fetch`."
+        "Cannot find ontology directory. Use --ontology <path>, cd into an ontology, or run `existence fetch`."
             .to_string(),
     )
 }
@@ -201,7 +201,7 @@ terms = ["existence"]
         let tmp = tempfile::tempdir().unwrap();
         std::fs::create_dir_all(tmp.path().join("src")).unwrap();
         std::fs::write(
-            tmp.path().join("exkernel.toml"),
+            tmp.path().join("existence.toml"),
             "[meta]\nname = \"t\"\ndescription = \"t\"\n",
         )
         .unwrap();
