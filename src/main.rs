@@ -3,6 +3,7 @@ mod config;
 mod markdown;
 
 use clap::{Parser, Subcommand};
+use clap_complete::Shell;
 use std::path::PathBuf;
 use std::process;
 
@@ -12,7 +13,7 @@ use std::process;
     version,
     about = "CLI for the Existential Kernel ontology framework"
 )]
-struct Cli {
+pub struct Cli {
     /// Path to the ontology directory (overrides auto-detection)
     #[arg(long, global = true)]
     ontology: Option<PathBuf>,
@@ -31,6 +32,20 @@ enum Commands {
         /// Output parsed sections as JSON
         #[arg(long)]
         json: bool,
+    },
+
+    /// Search across term files by relevance
+    Search {
+        /// Search query (matches term names, definitions, and content)
+        query: String,
+
+        /// Output results as JSON
+        #[arg(long)]
+        json: bool,
+
+        /// Maximum number of results (default 10)
+        #[arg(long, default_value = "10")]
+        limit: usize,
     },
 
     /// Navigate the scoping chain — list terms at a ring level
@@ -61,6 +76,12 @@ enum Commands {
         source: Option<String>,
     },
 
+    /// Generate shell completion scripts
+    Completions {
+        /// Shell to generate completions for (bash, zsh, fish, elvish, powershell)
+        shell: Shell,
+    },
+
     /// Set up ~/.claude integration (not yet implemented)
     Install,
 
@@ -85,6 +106,14 @@ fn main() {
             let ontology_dir = resolve_or_exit(cli.ontology.as_deref());
             commands::lookup::run(&ontology_dir, term, json)
         }
+        Commands::Search {
+            ref query,
+            json,
+            limit,
+        } => {
+            let ontology_dir = resolve_or_exit(cli.ontology.as_deref());
+            commands::search::run(&ontology_dir, query, json, limit)
+        }
         Commands::Scope { ring } => {
             let ontology_dir = resolve_or_exit(cli.ontology.as_deref());
             commands::scope::run(&ontology_dir, ring)
@@ -101,6 +130,10 @@ fn main() {
             let ontology_dir = config::resolve_ontology_dir(cli.ontology.as_deref())
                 .unwrap_or_else(|_| PathBuf::from("."));
             commands::fetch::run(&ontology_dir, source.as_deref())
+        }
+        Commands::Completions { shell } => {
+            commands::completions::run(shell);
+            Ok(())
         }
         Commands::Install => {
             println!("exkernel install: not yet implemented");
