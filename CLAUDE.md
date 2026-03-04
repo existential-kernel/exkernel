@@ -24,6 +24,7 @@ src/
 - **Ring keys**: TOML table keys are strings (`[rings.0]`), stored as `BTreeMap<String, Ring>`, accessed via `Config::get_ring(u32)` and `Config::rings_sorted()`
 - **Markdown parsing**: Section extraction matches `## [SectionName]` or `## SectionName` headings; link extraction uses regex for `[term](./term.md)` patterns
 - **Error handling**: All commands return `Result<(), String>` — main prints errors to stderr and exits with code 1
+- **Stub commands**: `install`, `serve`, `build-site`, `context` are defined in the CLI enum but print "not yet implemented" messages — no command files for these yet
 
 ## Development
 

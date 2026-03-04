@@ -112,17 +112,17 @@ upstream = "github:existential-kernel/ontology"
 
 ## Commands (v0.1.0)
 
-| Command | Status |
-|---------|--------|
-| `lookup <term>` | Implemented |
-| `scope [ring]` | Implemented |
-| `lint [path]` | Implemented |
-| `graph [ring]` | Implemented |
-| `fetch [source]` | Implemented |
-| `install` | Planned |
-| `serve` | Planned |
-| `build-site` | Planned |
-| `context <domain>` | Planned |
+| Command | Description | Status |
+|---------|-------------|--------|
+| `lookup <term>` | Read a node's full definition | Implemented |
+| `scope [ring]` | List terms at a ring level | Implemented |
+| `lint [path]` | Validate nodes against SPEC.md rules | Implemented |
+| `graph [ring]` | Generate term relationship graph (DOT/JSON) | Implemented |
+| `fetch [source]` | Clone or pull ontology from GitHub | Implemented |
+| `install` | Set up ~/.claude integration | Planned |
+| `serve` | Start local API server | Planned |
+| `build-site` | Generate static site + JSON API | Planned |
+| `context <domain>` | Suggest relevant terms for a domain | Planned |
 
 ## License
 

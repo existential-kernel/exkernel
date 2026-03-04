@@ -5,7 +5,10 @@ edition = "2024"
 description = "CLI for the Existential Kernel ontology framework"
 license = "Apache-2.0"
 repository = "https://github.com/existential-kernel/exkernel"
+homepage = "https://github.com/existential-kernel/exkernel"
 readme = "README.md"
+keywords = ["ontology", "cli", "knowledge-graph", "domain-modeling"]
+categories = ["command-line-utilities"]
 
 [[bin]]
 name = "exkernel"
