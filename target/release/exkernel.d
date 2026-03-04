@@ -1,0 +1,1 @@
+/tmp/exkernel/target/release/exkernel: /tmp/exkernel/src/commands/fetch.rs /tmp/exkernel/src/commands/graph.rs /tmp/exkernel/src/commands/lint.rs /tmp/exkernel/src/commands/lookup.rs /tmp/exkernel/src/commands/mod.rs /tmp/exkernel/src/commands/scope.rs /tmp/exkernel/src/config.rs /tmp/exkernel/src/main.rs /tmp/exkernel/src/markdown.rs
